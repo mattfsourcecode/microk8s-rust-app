@@ -1,0 +1,114 @@
+# Number of replicas for the Deployment
+replicaCount: 2
+
+# Container image configuration
+image:
+  repository: nginx # Replace with your Docker image repository
+  tag: latest # Specify a valid tag
+  pullPolicy: IfNotPresent
+
+# Image pull secrets for private Docker repositories
+imagePullSecrets: [] # Leave empty if not using private registries
+
+# Override chart name (optional)
+nameOverride: ""
+fullnameOverride: ""
+
+# Service account configuration
+serviceAccount:
+  create: true # Set to false if you don’t want a service account
+  automount: true # Automatically mount API credentials
+  annotations: {} # Additional annotations for the service account
+  name: "" # Custom service account name (leave blank for default)
+
+# Pod-specific annotations and labels
+podAnnotations: {}
+podLabels: {}
+
+# Pod security context
+podSecurityContext: {}
+# Uncomment to customize:
+# podSecurityContext:
+#   fsGroup: 2000
+
+# Container security context
+securityContext: {}
+# Uncomment to customize:
+# securityContext:
+#   capabilities:
+#     drop:
+#       - ALL
+#   readOnlyRootFilesystem: true
+#   runAsNonRoot: true
+#   runAsUser: 1000
+
+# Service configuration
+service:
+  type: ClusterIP # Service type (ClusterIP, NodePort, LoadBalancer)
+  port: 8080 # External port
+  targetPort: 8080 # Container port to expose
+
+# Ingress configuration (disabled by default)
+ingress:
+  enabled: false # Enable Ingress if needed
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: [] # Leave empty for no TLS, or configure your certificates
+
+# Resource limits and requests
+resources: {}
+# Uncomment to enable:
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 128Mi
+#   requests:
+#     cpu: 100m
+#     memory: 64Mi
+
+# Liveness and readiness probes
+livenessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+# Autoscaling configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+# Additional volumes and mounts
+volumes: []
+# Uncomment to add volumes:
+# volumes:
+# - name: example-volume
+#   configMap:
+#     name: example-config
+
+volumeMounts: []
+# Uncomment to mount volumes:
+# volumeMounts:
+# - name: example-volume
+#   mountPath: /etc/example
+#   readOnly: true
+
+# Node scheduling preferences
+nodeSelector: {}
+tolerations: []
+affinity: {}
