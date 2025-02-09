@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 kube = { version = "0.84" }
-k8s-openapi = { version = "0.18", features = ["v1_26"] }
+k8s-openapi = { version = "0.24", features = ["v1_26"] }
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
