@@ -1,24 +1,67 @@
 # LocalAI Values Configuration
 fullnameOverride: "localai"
 
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+
 localai:
   enabled: true
+  image:
+    repository: localai/localai
+    tag: latest
+    pullPolicy: Always
+  replicaCount: 1
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
   persistence:
+    enabled: true
     models:
       enabled: true
       storageClassName: "microk8s-hostpath"
       size: 10Gi
       accessMode: ReadWriteOnce
-
-service:
-  type: ClusterIP
-  port: 8080
+  initContainers:
+    - name: model-downloader
+      image: curlimages/curl
+      command: ["/bin/sh", "-c"]
+      args:
+        - |
+          curl -L -o /models/ggml-gpt4all-j.bin https://gpt4all.io/models/ggml-gpt4all-j.bin
+      volumeMounts:
+        - name: models
+          mountPath: /models
+  volumes:
+    - name: models-config
+      configMap:
+        name: models-config
+  volumeMounts:
+    - name: models-config
+      mountPath: /models/models.yaml
+      subPath: models.yaml
 
 ingress:
   enabled: false
 
 gateway:
   enabled: false
+certificate:
+  issuerName: localai-selfsigned-issuer
 
 certificateEnabled: false
 
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
