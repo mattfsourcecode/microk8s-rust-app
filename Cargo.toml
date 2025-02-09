@@ -1,11 +1,11 @@
 [package]
-name = "kube_example"
+name = "kube_app"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-kube = { version = "0.84" }
-k8s-openapi = { version = "0.18", features = ["v1_26"] }
+kube = { version = "0.89.0", features = ["derive", "runtime", "client", "rustls-tls", "ws"] }
+k8s-openapi = { version = "0.21.1", features = ["v1_28"] }
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
