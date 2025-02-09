@@ -1,28 +1,36 @@
 # LocalAI Values Configuration
 fullnameOverride: "localai"
 
+gateway:
+  enabled: true
+  hostname: "localai.example.com"
+  class: "nginx"
+  tls:
+    enabled: true
+autoscaling:
+  enabled: false
+
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
   name: ""
-  # Automatically mount a ServiceAccount's API credentials?
   automount: true
 
 localai:
   enabled: true
-  image:
-    repository: localai/localai
-    tag: latest
-    pullPolicy: Always
-  replicaCount: 1
   service:
     type: ClusterIP
     port: 8080
     targetPort: 8080
+  models:
+    - name: mistral
+      path: models/mistral-7b-instruct-v0.1.Q4_K_M.gguf
+      parameters:
+        template: mistral
+        context_size: 8192
+        f16: true
+        gpu_layers: 50
+        threads: 8
   persistence:
     enabled: true
     models:
@@ -30,38 +38,30 @@ localai:
       storageClassName: "microk8s-hostpath"
       size: 10Gi
       accessMode: ReadWriteOnce
-  initContainers:
-    - name: model-downloader
-      image: curlimages/curl
-      command: ["/bin/sh", "-c"]
-      args:
-        - |
-          curl -L -o /models/ggml-gpt4all-j.bin https://gpt4all.io/models/ggml-gpt4all-j.bin
-      volumeMounts:
-        - name: models
-          mountPath: /models
-  volumes:
-    - name: models-config
-      configMap:
-        name: models-config
-  volumeMounts:
-    - name: models-config
-      mountPath: /models/models.yaml
-      subPath: models.yaml
+  image:
+    repository: localai/localai
+    tag: latest
+    pullPolicy: Always
 
-ingress:
-  enabled: false
+initContainers:
+  - name: model-downloader
+    image: curlimages/curl
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        curl -L -o /models/mistral-7b-instruct-v0.1.Q4_K_M.gguf https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.1-GGUF/resolve/main/mistral-7b-instruct-v0.1.Q4_K_M.gguf
+    volumeMounts:
+      - name: models
+        mountPath: /models
 
-gateway:
-  enabled: false
-certificate:
-  issuerName: localai-selfsigned-issuer
+replicaCount: 1
 
-certificateEnabled: false
+volumes:
+  - name: models-config
+    configMap:
+      name: models-config
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+volumeMounts:
+  - name: models-config
+    mountPath: /models/models.yaml
+    subPath: models.yaml

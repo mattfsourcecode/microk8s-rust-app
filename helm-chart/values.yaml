@@ -1,23 +1,37 @@
-# Override name of generated resources
-fullnameOverride: "nginx-server"
+# LocalAI configuration
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
 
-# Number of replicas
-replicaCount: 1
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+  # Annotations to add to the service account
+  annotations: {}
+  # AutomountServiceAccountToken indicates whether pods running as this service account should have an API token automatically mounted
+  automount: true
 
-# Image configuration
-image:
-  repository: nginx
-  tag: latest
-  pullPolicy: IfNotPresent
+localai:
+  replicaCount: 1
+  image:
+    repository: localai/localai
+    tag: latest
+    pullPolicy: IfNotPresent
 
-# Service configuration
 service:
   type: ClusterIP
-  port: 80
+  port: 8080
 
 # Gateway API configuration
 gateway:
   enabled: true
+  className: nginx
   listeners:
     - name: http
       protocol: HTTP
@@ -25,7 +39,6 @@ gateway:
       allowedRoutes:
         namespaces:
           from: Same
-      tls: {}
     - name: https
       protocol: HTTPS
       port: 443
@@ -35,17 +48,12 @@ gateway:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: example-cert-tls
+          - name: localai-tls
             kind: Secret
-            group: ""
-
-# HTTPRoute configuration
-routes:
-  - enabled: true
-    hostnames:
-      - "example.local"
-    rules:
-      - backendRefs:
-          - name: nginx-server
-            port: 80
-    redirectHTTPtoHTTPS: true
+  hostnames:
+    - "ai.example.com"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
