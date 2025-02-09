@@ -1,9 +1,16 @@
+{{- if .Values.gateway.enabled -}}
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: Gateway
 metadata:
-  name: example-gateway
+  name: {{ include "helm-chart.fullname" . }}
+  labels:
+    {{- include "helm-chart.labels" . | nindent 4 }}
+  {{- with .Values.gateway.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
-  gatewayClassName: nginx
+  gatewayClassName: {{ .Values.gateway.className }}
   listeners:
     - name: http
       port: 80
@@ -11,12 +18,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
+    {{- if .Values.gateway.tls }}
     - name: https
       port: 443
       protocol: HTTPS
       tls:
         certificateRefs:
-          - name: example-cert-tls
+          {{- range .Values.gateway.tls }}
+          - name: {{ .secretName }}
+          {{- end }}
       allowedRoutes:
         namespaces:
           from: Same
+    {{- end }}
+{{- end }}

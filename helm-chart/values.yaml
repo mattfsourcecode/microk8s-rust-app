@@ -3,8 +3,8 @@ replicaCount: 2
 
 # Container image configuration
 image:
-  repository: nginx # Replace with your Docker image repository
-  tag: latest # Specify a valid tag
+  repository: ghcr.io/nginx/nginx-gateway-fabric
+  tag: "1.0.0"
   pullPolicy: IfNotPresent
 
 # Image pull secrets for private Docker repositories
@@ -59,6 +59,18 @@ ingress:
         - path: /
           pathType: ImplementationSpecific
   tls: [] # Leave empty for no TLS, or configure your certificates
+
+# Gateway API configuration
+gateway:
+  enabled: true
+  className: nginx-gateway
+  annotations: {}
+  hosts:
+    - host: example.local
+      paths:
+        - path: /
+          pathType: PathPrefix
+  tls: []
 
 # Resource limits and requests
 resources: {}
