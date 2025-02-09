@@ -1,33 +1,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-deployment
+  name: localai-test-deployment
   labels:
-    app: example
+    app: localai-test-deployment
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 2
   selector:
     matchLabels:
-      app: example
+      app: localai-test-deployment
   template:
     metadata:
       labels:
-        app: example
+        app: localai-test-deployment
     spec:
       containers:
-        - name: kube-example
-          image: nginx:latest
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - containerPort: 80
-              name: http
-            - containerPort: 443
-              name: https
-          volumeMounts:
-            - name: certs
-              mountPath: /etc/nginx/certs
-              readOnly: true
-      volumes:
-        - name: certs
-          secret:
-            secretName: example-cert-tls
+      - name: localai-test
+        image: quay.io/go-skynet/local-ai:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+

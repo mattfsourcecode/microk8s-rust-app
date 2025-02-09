@@ -1,0 +1,56 @@
+{{- if .Values.localai.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "localai.fullname" . }}
+  labels:
+    {{- include "localai.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.localai.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "localai.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "localai.selectorLabels" . | nindent 12 }}
+    spec:
+      {{- with .Values.localai.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with .Values.localai.affinity }}
+      affinity:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with .Values.localai.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with .Values.localai.securityContext }}
+      securityContext:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      containers:
+        - name: {{ include "localai.name" . }}
+          image: "{{ .Values.localai.image.repository }}:{{ .Values.localai.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.localai.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          {{- with .Values.localai.env }}
+          env:
+            {{- toYaml . | nindent 16 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.localai.resources | nindent 16 }}
+          volumeMounts:
+            - name: models
+              mountPath: /models
+      volumes:
+        - name: models
+          persistentVolumeClaim:
+            claimName: {{ include "localai.fullname" . }}-models
+{{- end }}
+

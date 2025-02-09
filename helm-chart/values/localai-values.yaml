@@ -1,0 +1,24 @@
+# LocalAI Values Configuration
+fullnameOverride: "localai"
+
+localai:
+  enabled: true
+  persistence:
+    models:
+      enabled: true
+      storageClassName: "microk8s-hostpath"
+      size: 10Gi
+      accessMode: ReadWriteOnce
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+gateway:
+  enabled: false
+
+certificateEnabled: false
+
