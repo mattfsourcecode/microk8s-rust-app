@@ -2,15 +2,11 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: Gateway
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ .Values.fullnameOverride }}
   labels:
     {{- include "helm-chart.labels" . | nindent 4 }}
-  {{- with .Values.gateway.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
-  gatewayClassName: {{ .Values.gateway.className }}
+  gatewayClassName: {{ .Values.gateway.class }}
   listeners:
     - name: http
       port: 80
@@ -18,17 +14,17 @@ spec:
       allowedRoutes:
         namespaces:
           from: Same
-    {{- if .Values.gateway.tls }}
+    {{- if .Values.gateway.tls.enabled }}
     - name: https
       port: 443
       protocol: HTTPS
-      tls:
-        certificateRefs:
-          {{- range .Values.gateway.tls }}
-          - name: {{ .secretName }}
-          {{- end }}
       allowedRoutes:
         namespaces:
           from: Same
+      tls:
+        certificateRefs:
+        - kind: Secret
+          name: {{ .Values.fullnameOverride }}-tls
+        mode: Terminate
     {{- end }}
 {{- end }}

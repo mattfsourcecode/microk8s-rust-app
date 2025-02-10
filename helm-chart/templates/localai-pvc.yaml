@@ -1,0 +1,17 @@
+{{- if and .Values.localai.enabled .Values.localai.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "localai.fullname" . }}-models
+  labels:
+    {{- include "localai.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.localai.persistence.models.accessMode }}
+  {{- if .Values.localai.persistence.models.storageClassName }}
+  storageClassName: {{ .Values.localai.persistence.models.storageClassName }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.localai.persistence.models.size }}
+{{- end }}

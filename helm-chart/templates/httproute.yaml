@@ -2,30 +2,23 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-  name: {{ include "helm-chart.fullname" . }}
+  name: {{ .Values.fullnameOverride }}
   labels:
     {{- include "helm-chart.labels" . | nindent 4 }}
 spec:
   parentRefs:
-  - name: {{ include "helm-chart.fullname" . }}
+  - name: {{ .Values.fullnameOverride }}
     kind: Gateway
     group: gateway.networking.k8s.io
   hostnames:
-  {{- range .Values.gateway.hosts }}
-  - {{ .host | quote }}
-  {{- end }}
+    - {{ .Values.gateway.hostname }}
   rules:
-  {{- range .Values.gateway.hosts }}
-  {{- range .paths }}
-  - matches:
-    - path:
-        type: {{ .pathType }}
-        value: {{ .path }}
-    backendRefs:
-    - name: {{ include "helm-chart.fullname" $ }}
-      kind: Service
-      group: ""
-      port: {{ $.Values.service.port }}
-  {{- end }}
-  {{- end }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+      - name: {{ .Values.fullnameOverride }}-{{ .Values.fullnameOverride }}
+        kind: Service
+        port: {{ .Values.localai.service.port }}
 {{- end }}

@@ -1,0 +1,41 @@
+# Enable certificate management
+certificateEnabled: true
+
+# Service configuration
+service:
+  port: 8080
+  type: ClusterIP
+
+# Gateway API disabled (using ingress instead)
+gateway:
+  enabled: false
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+  hosts:
+    - host: example.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: example-cert-tls
+      hosts:
+        - example.local
+
+# LocalAI configuration
+localai:
+  enabled: true
+  persistence:
+    models:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClassName: microk8s-hostpath
+
+# Fullname override
+fullnameOverride: localai
+
