@@ -1,4 +1,6 @@
 # LocalAI configuration
+fullnameOverride: "localai"
+
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -18,20 +20,47 @@ serviceAccount:
   automount: true
 
 localai:
+  enabled: true
   replicaCount: 1
   image:
     repository: localai/localai
     tag: latest
     pullPolicy: IfNotPresent
+  
+  # Model configuration
+  models:
+    path: /models
+    preload:
+      - name: llama-3.2-1b-instruct-q4_k_m.gguf
+        url: https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q4_K_M-GGUF/resolve/main/llama-3.2-1b-instruct-q4_k_m.gguf
+  
+  # Persistent volume configuration for models
+  persistence:
+    models:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClass: microk8s-hostpath
+      mountPath: /models
+  
+  # Volume mounts configuration
+  volumeMounts:
+    - name: models
+      mountPath: /models
+      readOnly: false
 
-service:
-  type: ClusterIP
-  port: 8080
+  service:
+    type: ClusterIP
+    port: 8080
+
 
 # Gateway API configuration
 gateway:
   enabled: true
-  className: nginx
+  hostname: "ai.example.com"
+  tls:
+    enabled: true
+  class: nginx
   listeners:
     - name: http
       protocol: HTTP
