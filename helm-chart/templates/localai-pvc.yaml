@@ -1,4 +1,4 @@
-{{- if and .Values.localai.enabled .Values.localai.persistence.enabled }}
+{{- if and .Values.localai.enabled .Values.localai.persistence.models.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -7,11 +7,9 @@ metadata:
     {{- include "localai.labels" . | nindent 4 }}
 spec:
   accessModes:
-    - {{ .Values.localai.persistence.models.accessMode }}
-  {{- if .Values.localai.persistence.models.storageClassName }}
-  storageClassName: {{ .Values.localai.persistence.models.storageClassName }}
-  {{- end }}
+    - ReadWriteOnce
+  storageClassName: microk8s-hostpath
   resources:
     requests:
-      storage: {{ .Values.localai.persistence.models.size }}
+      storage: 10Gi
 {{- end }}
