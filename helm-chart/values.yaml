@@ -19,6 +19,7 @@ serviceAccount:
   # AutomountServiceAccountToken indicates whether pods running as this service account should have an API token automatically mounted
   automount: true
 
+# LocalAI configuration 
 localai:
   enabled: true
   replicaCount: 1
@@ -26,33 +27,37 @@ localai:
     repository: localai/localai
     tag: latest
     pullPolicy: IfNotPresent
-  
+
+  # Environment variables configuration
+  env:
+    - name: LOCALAI_MODELS_PATH
+      value: /build/models
+
   # Model configuration
   models:
-    path: /models
+    path: /build/models
     preload:
       - name: llama-3.2-1b-instruct-q4_k_m.gguf
         url: https://huggingface.co/hugging-quants/Llama-3.2-1B-Instruct-Q4_K_M-GGUF/resolve/main/llama-3.2-1b-instruct-q4_k_m.gguf
-  
+
   # Persistent volume configuration for models
   persistence:
     models:
       enabled: true
-      accessMode: ReadWriteOnce
+      createClaim: true
       size: 10Gi
-      storageClass: microk8s-hostpath
-      mountPath: /models
-  
-  # Volume mounts configuration
-  volumeMounts:
-    - name: models
-      mountPath: /models
-      readOnly: false
+      storageClass: "microk8s-hostpath"
+      mountPath: /build/models
+    output:
+      enabled: false
+      createClaim: false
+      size: 1Gi
+      storageClass: "microk8s-hostpath"
+      mountPath: /build/output
 
   service:
     type: ClusterIP
     port: 8080
-
 
 # Gateway API configuration
 gateway:
@@ -86,3 +91,6 @@ gateway:
         - path:
             type: PathPrefix
             value: /
+service:
+  type: ClusterIP
+  port: 8080

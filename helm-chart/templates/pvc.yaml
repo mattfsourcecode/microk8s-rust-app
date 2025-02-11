@@ -1,0 +1,41 @@
+{{- if .Values.localai.persistence.models.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "localai.fullname" . }}-models
+  labels:
+    {{- include "localai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: models-storage
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.localai.persistence.models.size | quote }}
+  {{- if .Values.localai.persistence.models.storageClass }}
+  storageClassName: {{ .Values.localai.persistence.models.storageClass }}
+  {{- end }}
+---
+{{- end }}
+{{- if .Values.localai.persistence.output.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "localai.fullname" . }}-output
+  labels:
+    {{- include "localai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: output-storage
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.localai.persistence.output.size | quote }}
+  {{- if .Values.localai.persistence.output.storageClass }}
+  storageClassName: {{ .Values.localai.persistence.output.storageClass }}
+  {{- end }}
+{{- end }}

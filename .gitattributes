@@ -1,1 +1,11 @@
-helm-chart/** linguist-language=Rust
+# Mark actual Rust files
+*.rs linguist-language=Rust
+
+# Mark Helm/Kubernetes YAML files appropriately
+helm-chart/**/*.yaml linguist-language=YAML
+helm-chart/**/*.yml linguist-language=YAML
+helm-chart/**/*.tpl linguist-language=Smarty
+
+# If you want to mark some helm files as documentation
+helm-chart/**/README.md linguist-documentation
+helm-chart/**/NOTES.txt linguist-documentation

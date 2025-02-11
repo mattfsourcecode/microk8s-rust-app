@@ -50,6 +50,10 @@ spec:
           resources:
             {{- toYaml .Values.localai.resources | nindent 16 }}
           volumeMounts:
+            {{- if .Values.localai.persistence.models.enabled }}
+            - name: models
+              mountPath: {{ .Values.localai.persistence.models.mountPath }}
+            {{- end }}
             {{- with .Values.localai.volumeMounts }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
