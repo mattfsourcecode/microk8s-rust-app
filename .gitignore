@@ -20,9 +20,19 @@ target/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# Keys
 # Do NOT store *.key or *.crt files in the repository.
 # Adding this to .gitignore prevents accidental commits of sensitive private keys or certificates.
 *.key
 *.crt
 
+# Helm
+*.tgz
+.helm/
+Chart.lock
+
+# K8sGPT
+k8sgpt_*.deb
+
+# Docs
 microk8s_setup_and_ai_interaction_command_line_instructions.md

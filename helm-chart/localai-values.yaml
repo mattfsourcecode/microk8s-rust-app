@@ -35,7 +35,11 @@ localai:
       accessMode: ReadWriteOnce
       size: 10Gi
       storageClassName: microk8s-hostpath
+    output:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 10Gi
+      storageClassName: microk8s-hostpath
 
 # Fullname override
 fullnameOverride: localai
-

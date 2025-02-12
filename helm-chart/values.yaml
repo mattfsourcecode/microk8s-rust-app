@@ -49,9 +49,9 @@ localai:
       storageClass: "microk8s-hostpath"
       mountPath: /build/models
     output:
-      enabled: false
-      createClaim: false
-      size: 1Gi
+      enabled: true
+      createClaim: true
+      size: 2Gi
       storageClass: "microk8s-hostpath"
       mountPath: /build/output
 
@@ -94,3 +94,9 @@ gateway:
 service:
   type: ClusterIP
   port: 8080
+k8sgpt:
+  name: k8sgpt-default
+  backend: localai
+  model: gpt-4
+  analytics:
+    enabled: false
