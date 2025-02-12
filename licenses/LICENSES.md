@@ -10,6 +10,7 @@
 
 ## Infrastructure Components
 
+- **Helm** - [Apache License 2.0](https://github.com/helm/helm/blob/main/LICENSE)
 - **K8sGPT** - [Apache License 2.0](https://github.com/k8sgpt-ai/k8sgpt/blob/main/LICENSE)
 - **LocalAI** - [MIT License](https://github.com/mudler/LocalAI/blob/master/LICENSE)
 - **MicroK8s** - [Apache License 2.0](https://github.com/canonical/microk8s/blob/master/LICENSE)
