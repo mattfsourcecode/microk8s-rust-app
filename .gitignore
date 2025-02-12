@@ -36,3 +36,4 @@ k8sgpt_*.deb
 
 # Docs
 microk8s_setup_and_ai_interaction_command_line_instructions.md
+/helm-chart/README.md
