@@ -1,4 +1,10 @@
-# Kubernetes with Rust, MicroK8s, cert-manager, Gateway API, and LocalAI
+# ⎈ Kubernetes with Rust, MicroK8s, cert-manager, Gateway API, and LocalAI
+
+## 🚧 🛠️ EXPERIMENTAL STATUS AND DEVELOPMENT PAUSE
+
+#### Before reading further, please be aware that this repository serves entirely as an experimental codebase in which I am learning Kubernetes and Rust. It was developed on a local Ubuntu OS without containerization. While features passed manual tests before merging, some parts may be incomplete. The development clusters would be challenging to replicate locally due to non-public environment configurations; therefore, instructions are not provided. The repository has reached a state where new feature development has been **paused entirely** until a CI testing workflow is implemented, except for any [pull requests](https://github.com/mattfsourcecode/ai-kubernetes-gateway/pulls) that are already open. [Issues](https://github.com/mattfsourcecode/ai-kubernetes-gateway/issues) may continue to be added. Thanks for reading. 😀
+
+---
 
 This repository demonstrates AI-driven Kubernetes clusters managed with [**MicroK8s**](https://microk8s.io/), integrating a [**Rust**](https://www.rust-lang.org/) application that interacts with the Kubernetes API using [**Tokio**](https://tokio.rs/) and the [**kube**](https://kube.rs/) crate. It features modern service networking with the [Gateway API](https://gateway-api.sigs.k8s.io/), TLS certificate management via [**cert-manager**](https://cert-manager.io/), and AI capabilities using [**K8sGPT**](https://k8sgpt.ai/) for cluster analytics, and [**LocalAI**](https://localai.io/) for API-compatible AI model endpoints.
 
