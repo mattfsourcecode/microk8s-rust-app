@@ -1,0 +1,15 @@
+k8sgpt:
+  enabled: true
+  version: v0.3.41
+  model: gpt-4
+  backend:
+    type: localai
+    baseUrl: http://localai:8080
+  config:
+    ai:
+      enabled: true
+      backend: localai
+      model: gpt-4
+    noCache: false
+    repository: ghcr.io/k8sgpt-ai/k8sgpt
+    version: v0.3.41
