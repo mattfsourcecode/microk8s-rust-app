@@ -8,27 +8,14 @@ service:
 
 # Gateway API disabled (using ingress instead)
 gateway:
-  enabled: false
-
-# Ingress configuration
-ingress:
   enabled: true
-  className: nginx
-  annotations:
-    cert-manager.io/cluster-issuer: selfsigned-issuer
-  hosts:
-    - host: example.local
-      paths:
-        - path: /
-          pathType: Prefix
-  tls:
-    - secretName: example-cert-tls
-      hosts:
-        - example.local
 
 # LocalAI configuration
 localai:
   enabled: true
+  env:
+    CONTEXT_SIZE: "0"
+    THREADS: "4"
   persistence:
     models:
       enabled: true
