@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  localai:
+    image: localai/localai:latest
+    volumes:
+      - ./models:/build/models
+      - ./output:/build/output
+    environment:
+      - LOCALAI_MODELS_PATH=/build/models
+      - LOCALAI_MODEL=llama-3.2-1b-instruct
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  k8sgpt:
+    image: ghcr.io/k8sgpt-ai/k8sgpt:v0.3.41
+    depends_on:
+      localai:
+        condition: service_healthy
+    environment:
+      - K8SGPT_BACKEND=localai
+      - K8SGPT_BACKEND_URL=http://localai:8080
+      - K8SGPT_MODEL=llama-3.2-1b-instruct
+      - K8SGPT_CACHE=true
+    volumes:
+      - ./.k8sgpt:/root/.k8sgpt
+    healthcheck:
+      test: ["CMD", "k8sgpt", "version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  kube-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      localai:
+        condition: service_healthy
+      k8sgpt:
+        condition: service_healthy
+    volumes:
+      - ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro
+
+volumes:
+  models:
+  output:
+
