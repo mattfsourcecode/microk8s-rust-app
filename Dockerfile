@@ -1,5 +1,5 @@
 # Stage 1: Builder
-FROM rust:1.75-slim-bookworm as builder
+FROM rust:1.84-slim-bookworm as builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \
@@ -29,9 +29,12 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
     && rm -rf /var/lib/apt/lists/* \
-    && groupadd -r appuser && useradd -r -g appuser appuser
+    && groupadd -r appuser && useradd -r -g appuser appuser \
+    && mkdir -p /home/appuser/.kube \
+    && chown -R appuser:appuser /home/appuser \
+    && chmod 700 /home/appuser/.kube
 
-# Copy the binary from builder
+    # Copy the binary from builder
 COPY --from=builder /usr/src/app/target/release/kube_app /usr/local/bin/
 
 # Set proper permissions
