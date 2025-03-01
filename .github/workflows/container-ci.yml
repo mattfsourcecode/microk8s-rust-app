@@ -1,0 +1,25 @@
+name: Container CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build and test container
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose-test.yml build
+          docker compose -f docker-compose.yml -f docker-compose-test.yml up --abort-on-container-exit
+      
+      - name: Clean up
+        if: always()
+        run: docker compose -f docker-compose.yml -f docker-compose-test.yml down
