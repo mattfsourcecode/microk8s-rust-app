@@ -7,7 +7,7 @@
 <br>
 <br>
 
-This repository demonstrates AI-driven [**Kubernetes**](https://kubernetes.io/) clusters managed with [**MicroK8s**](https://microk8s.io/), integrating a [**Rust**](https://www.rust-lang.org/) application that interacts with the [**Kubernetes API**](https://kubernetes.io/docs/reference/kubernetes-api/) using [**Tokio**](https://tokio.rs/) and the [**kube**](https://kube.rs/) crate. It features modern service networking with the [**Gateway API**](https://gateway-api.sigs.k8s.io/), TLS certificate management via [**cert-manager**](https://cert-manager.io/), and AI capabilities using [**K8sGPT**](https://k8sgpt.ai/) for cluster analytics and [**LocalAI**](https://localai.io/) for API-compatible AI model endpoints.
+This repository demonstrates AI-driven [**Kubernetes**](https://kubernetes.io/) clusters managed with [**MicroK8s**](https://microk8s.io/), integrating a [**Rust**](https://www.rust-lang.org/) application that interacts with the [**Kubernetes API**](https://kubernetes.io/docs/reference/kubernetes-api/) using [**Tokio**](https://tokio.rs/) and the [**kube**](https://kube.rs/) crate. It features modern service networking with the [**Gateway API**](https://gateway-api.sigs.k8s.io/), TLS certificate management via [**cert-manager**](https://cert-manager.io/), and AI capabilities using [**K8sGPT**](https://k8sgpt.ai/) for cluster analytics and [**LocalAI**](https://localai.io/) for API-compatible AI inference endpoints.
 
 <br>
 
@@ -29,7 +29,7 @@ The local Kubernetes deployments use TLS certificates created by a `selfsigned-i
 - **Cert-Manager**: Automates TLS certificate issuance using a `selfsigned-issuer` for development environments.
 - **Rust Application**: A minimal implementation demonstrating Kubernetes API interaction by listing Pods across all namespaces with their statuses, serving as a foundation for building advanced cluster operations such as pod management, resource monitoring, CRD handling, event watching, and multi-cluster management.
 - **K8sGPT**: Cluster diagnostics powered by AI.
-- **LocalAI**: Self-hosted AI capabilities with persistent storage for models, offering potential for privacy-focused, scalable, and cost-efficient AI model deployment.
+- **LocalAI**: Self-hosted AI capabilities with persistent storage for models, offering potential for privacy-focused, scalable, and cost-efficient AI inference endpoint deployment.
 
 <br>
 
@@ -46,7 +46,7 @@ The local Kubernetes deployments use TLS certificates created by a `selfsigned-i
 - **Dynamic Cluster Management**: Automate scaling, monitoring, and resource optimization across multiple clusters.
 - **Custom Resource Definitions (CRDs)**: Implement and manage custom Kubernetes resources tailored to specific application requirements.
 - **Event-Driven Automation**: Extend the Rust app to respond to Kubernetes events or webhooks for real-time cluster adjustments.
-- **AI Workload Orchestration**: Use LocalAI to manage and deploy advanced AI models for edge computing, predictive analytics, or machine learning tasks.
+- **AI Workload Orchestration**: Use LocalAI to manage and deploy advanced AI inference systems for edge computing, predictive analytics, or machine learning tasks.
 - **Security Enhancements**: Integrate advanced authentication mechanisms and Role-Based Access Control (RBAC) policies for secure multi-user environments.
 - **Multi-Tenancy Support**: Enable resource isolation and quota management for multi-tenant Kubernetes clusters.
 - **Advanced Networking**: Leverage Gateway API features for traffic splitting, failover mechanisms, and routing policies based on performance metrics.
@@ -58,4 +58,4 @@ The local Kubernetes deployments use TLS certificates created by a `selfsigned-i
 - **Scientific Simulations and Modeling**: Use AI to accelerate complex scientific simulations, such as climate modeling, molecular dynamics, or astrophysical computations, leveraging Kubernetes' scalable GPU resources.
 - **Context-Aware API Gateways**: Use AI models on Kubernetes endpoints to dynamically analyze incoming API requests and provide context-aware routing, such as adjusting traffic flow based on user behavior, request intent, or predicted resource demands. This can enhance scalability and improve user experience by intelligently prioritizing requests.
 - **Personalized Response Generation**: Deploy AI models on endpoints to deliver tailored responses to users, such as real-time content recommendations, adaptive UI/UX experiences, or personalized chatbot interactions. By integrating AI with Kubernetes, these models can scale based on traffic while ensuring low-latency, user-specific outputs for high-demand applications.
-- **Predictive Autoscaling for Endpoint Workloads**: Use AI models deployed on Kubernetes endpoints to predict traffic patterns and proactively scale resources. By analyzing historical and real-time data, the AI can optimize pod scaling to handle peak loads efficiently, reducing latency and preventing over-provisioning while ensuring seamless endpoint performance.
+- **Predictive Autoscaling for Endpoint Workloads**: Use AI inference endpoints on Kubernetes to predict traffic patterns and proactively scale resources. By analyzing historical and real-time data, the AI can optimize pod scaling to handle peak loads efficiently, reducing latency and preventing over-provisioning while ensuring seamless endpoint performance.
