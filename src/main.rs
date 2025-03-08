@@ -5,7 +5,8 @@ use tokio;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize Kubernetes client
-    let client = Client::try_default().await?;
+    let config = kube::Config::infer().await?;
+    let client = Client::try_from(config)?;
 
     // Access the Namespace API
     let namespaces: Api<Namespace> = Api::all(client.clone());
